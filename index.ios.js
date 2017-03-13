@@ -4,49 +4,69 @@
  * @flow
  */
 
-import React, { Component } from 'react';
-import {
+ import React, { Component } from 'react';
+  var gapi = require('gapi');
+ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  Button
 } from 'react-native';
 import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
 
+const onButtonPress = () => {
+  console.log('Test siraj');
+  gapi.server.setApiKey('AIzaSyB3TlhbCMpeqMmM4fTsOAYvR9Dy3mPDUE4')
+  gapi.server.load('plus','v1',function(){
+    var request = gapi.server.plus.people.get({userId: '102147307918874735077'});
+    request.execute(function(resp){
+        console.log(resp);
+        console.log('Test siraj');
+        res.writeHead(200, {'Content-Type': 'text/plain'});
+        res.end(JSON.stringify(resp));
+    });
+  });
+};
 
 export default class Space extends Component {
-   constructor(props) {
-      super();
-      GoogleSignin.configure({
+
+ constructor(props) {
+  super(props);
+
+  GoogleSignin.configure({
         iosClientId: "241655011171-5domt4jit9v0gor88rahvflkohrcoaaa.apps.googleusercontent.com", // only for iOS
       })
-      .then(() => {
+  .then(() => {
         // you can now call currentUserAsync()
       });
-    }
+}
 
-  signIn() {
-    GoogleSignin.signIn()
-.then((user) => {
-  console.log("In login view");
-  console.log(user);
-  this.setState({user: user});
-})
-.catch((err) => {
-  console.log("In error");
-  console.log('WRONG SIGNIN', err);
-})
-.done();
-  }
+// buttonClicked: function() {
+//     console.log('button clicked');
+//   },
 
-  render() {
-    return (
-      <GoogleSigninButton
-    style={{width: 48, height: 48}}
-    size={GoogleSigninButton.Size.Icon}
-    color={GoogleSigninButton.Color.Dark}
-     onPress={this.signIn.bind(this)}/>
-    );
+// onButtonPress = () => {
+//         console.log('Test siraj');
+//   gapi.server.setApiKey('AIzaSyB3TlhbCMpeqMmM4fTsOAYvR9Dy3mPDUE4')
+//   gapi.server.load('plus','v1',function(){
+//     var request = gapi.server.plus.people.get({userId: '102147307918874735077'});
+//     request.execute(function(resp){
+//         console.log(resp);
+//         console.log('Test siraj');
+//         res.writeHead(200, {'Content-Type': 'text/plain'});
+//         res.end(JSON.stringify(resp));
+//     });
+//   });
+// },
+
+render() {
+  return (
+    <Button
+     onPress={onButtonPress}
+     title="Learn More"
+     color="#841584"
+     accessibilityLabel="Learn more about this purple button"/>);
   }
 }
 
